@@ -30,11 +30,11 @@ jobs:
       - name: Configure GCP Artifact Registry
         run: |
           NPM_REGISTRY_HOST=$(echo "${{ vars.NPM_REGISTRY_URL }}" | sed 's|https://||')
-          echo "@progression-labs-development:registry=${{ vars.NPM_REGISTRY_URL }}" >> ~/.npmrc
+          echo "@progression-labs-dev:registry=${{ vars.NPM_REGISTRY_URL }}" >> ~/.npmrc
           echo "//${NPM_REGISTRY_HOST}:_authToken=${{ steps.gcp-auth.outputs.access_token }}" >> ~/.npmrc
 
       - name: Conform audit
-        run: npx @progression-labs-development/conform audit
+        run: npx @progression-labs-dev/conform audit
 
       - name: Conform check
-        run: npx @progression-labs-development/conform check
+        run: npx @progression-labs-dev/conform check
