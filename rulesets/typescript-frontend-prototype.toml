@@ -1,12 +1,8 @@
-# Python - Prototype
-# Relaxed checks for rapid prototyping
+# TypeScript - Frontend Prototype
+# Relaxed checks for rapid frontend prototyping
 
-[code.linting.ruff]
+[code.linting.eslint]
 enabled = true
-
-[code.linting.ruff.lint]
-select = ["E", "F"]
-ignore = ["E501", "F401", "F841"]
 
 # =============================================================================
 # Security
@@ -24,4 +20,4 @@ enabled = true
 
 [code.dependencies]
 enabled = true
-forbidden_lockfiles = ["requirements.txt", "Pipfile", "Pipfile.lock", "poetry.lock"]
+forbidden_lockfiles = ["yarn.lock", "package-lock.json"]
