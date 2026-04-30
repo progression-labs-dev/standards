@@ -16,22 +16,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: google-github-actions/auth@v2
-        id: gcp-auth
+      - uses: progression-labs-dev/github-actions/gcp-auth@main
         with:
-          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
-          token_format: access_token
+          gcp-project: ${{ vars.GCP_PROJECT_ID }}
+          gcp-project-number: ${{ vars.GCP_PROJECT_NUMBER }}
+          configure-npm: "true"
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      - name: Configure GCP Artifact Registry
-        run: |
-          NPM_REGISTRY_HOST=$(echo "${{ vars.NPM_REGISTRY_URL }}" | sed 's|https://||')
-          echo "@progression-labs-dev:registry=${{ vars.NPM_REGISTRY_URL }}" >> ~/.npmrc
-          echo "//${NPM_REGISTRY_HOST}:_authToken=${{ steps.gcp-auth.outputs.access_token }}" >> ~/.npmrc
 
       - name: Conform audit
         run: npx @progression-labs/conform audit
