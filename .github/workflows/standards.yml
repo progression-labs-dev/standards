@@ -19,8 +19,8 @@ jobs:
       - uses: google-github-actions/auth@v2
         id: gcp-auth
         with:
-          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          workload_identity_provider: projects/${{ vars.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: github-actions@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com
           token_format: access_token
 
       - uses: actions/setup-node@v4
@@ -29,9 +29,10 @@ jobs:
 
       - name: Configure GCP Artifact Registry
         run: |
-          NPM_REGISTRY_HOST=$(echo "${{ vars.NPM_REGISTRY_URL }}" | sed 's|https://||')
-          echo "@progression-labs-dev:registry=${{ vars.NPM_REGISTRY_URL }}" >> ~/.npmrc
-          echo "//${NPM_REGISTRY_HOST}:_authToken=${{ steps.gcp-auth.outputs.access_token }}" >> ~/.npmrc
+          REGISTRY_URL="https://europe-west2-npm.pkg.dev/progression-labs-platform/platform-npm-packages-registry-platform/"
+          REGISTRY_HOST=$(echo "$REGISTRY_URL" | sed 's|https://||; s|/*$||')
+          echo "@progression-labs:registry=${REGISTRY_URL}" >> ~/.npmrc
+          echo "//${REGISTRY_HOST}/:_authToken=${{ steps.gcp-auth.outputs.access_token }}" >> ~/.npmrc
 
       - name: Conform audit
         run: npx @progression-labs/conform audit
